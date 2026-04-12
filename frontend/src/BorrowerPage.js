@@ -66,7 +66,7 @@ function BorrowerPage() {
       return toast.error("Collateral must be ≥ 50% of loan.");
     try {
       setLoading(true);
-      toast.info("Awaiting MetaMask…");
+      toast.info("Awaiting MetaMask Confirmation...");
       const weiAmt = web3.utils.toWei(loanAmount, "ether");
       const weiCol = web3.utils.toWei(collateralAmount, "ether");
       await contract.methods.requestLoan(weiAmt, parseInt(duration)).send({ from: account, value: weiCol });
