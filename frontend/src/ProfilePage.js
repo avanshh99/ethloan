@@ -61,7 +61,7 @@ function ProfilePage() {
     loadStats();
   }, [contract, account, web3]);
 
-  const getRank = (xp) => xp >= 100 ? "Whale 🐋" : xp >= 50 ? "Pro Lender 📈" : "Newbie 🥚";
+  const getRank = (xp) => xp >= 100 ? "Whale 🐋" : xp >= 50 ? "Pro Lender 📈" : "Newbie 🐥 ";
   const scoreColor = (s) => s >= 80 ? "#4ADE80" : s >= 50 ? "#FFE533" : "#EF4444";
 
   return (
@@ -80,7 +80,7 @@ function ProfilePage() {
         <div className="text-right shrink-0">
           <p className="text-xs font-black uppercase text-gray-400 mb-2">Current Rank</p>
           <div
-            className="text-2xl font-black bg-[#FF00FF] px-5 py-3 border-4 border-black inline-block transform rotate-1"
+            className="text-2xl font-black bg-[#be23c6ff] px-5 py-3 border-4 border-black inline-block transform rotate-1"
             style={{ boxShadow: "3px 3px 0 #000" }}
           >
             {getRank(lenderXP)}
@@ -127,7 +127,7 @@ function ProfilePage() {
           </div>
           <NeoBar
             percent={lenderXP}
-            color="#FF00FF"
+            color="#be23c6ff"
             height="h-10"
             label={`${lenderXP} / 100 XP`}
           />
@@ -138,7 +138,7 @@ function ProfilePage() {
       {/* Volume Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
-          { label: "Total Borrowed", val: stats.totalBorrowed + " ETH", bg: "#FF00FF" },
+          { label: "Total Borrowed", val: stats.totalBorrowed + " ETH", bg: "#be23c6ff" },
           { label: "Total Lent", val: stats.totalLent + " ETH", bg: "#00FFFF" },
           { label: "Credit Score", val: creditScore + " / 100", bg: "#FFE533" },
           { label: "Lender Rank", val: getRank(lenderXP), bg: "#4ADE80" },

@@ -1,5 +1,5 @@
 import "./App.css";
-import { useEffect } from "react";
+import React from "react";
 import { Routes, Route, Link, useLocation, useNavigate } from "react-router-dom";
 
 import LenderPage from "./LenderPage";
@@ -48,7 +48,11 @@ function NavMenu() {
   if (location.pathname === "/") {
     return (
       <div className="text-center pb-8 z-10 relative">
-        <button onClick={handleConnect} className="neo-button text-2xl px-12 py-6 uppercase tracking-widest shadow-neo-lg transition-transform hover:scale-105 active:scale-95">
+        <button 
+          onClick={handleConnect} 
+          className="bg-[#FFE533] border-4 border-black text-black font-black text-2xl px-12 py-6 uppercase tracking-widest transition-all hover:bg-[#FCD34D] hover:-translate-y-1 active:translate-y-1 active:translate-x-1 focus:outline-none"
+          style={{ boxShadow: "8px 8px 0 #000" }}
+        >
           {account ? "Enter DAPP" : "Connect MetaMask"}
         </button>
       </div>
@@ -74,13 +78,6 @@ function NavMenu() {
 function App() {
   const { account } = useWeb3();
   const location = useLocation();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (account && location.pathname === "/") {
-       navigate("/marketplace");
-    }
-  }, [account, location.pathname, navigate]);
 
   return (
     <div className="neo-grid-bg min-h-screen relative overflow-x-hidden font-sans border-t-8 border-black">
