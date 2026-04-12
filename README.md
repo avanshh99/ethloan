@@ -9,7 +9,6 @@ A full-stack decentralized application (DApp) enabling trustless, peer-to-peer l
 - [Overview](#overview)
 - [Architecture](#architecture)
 - [Smart Contract](#smart-contract)
-- [Frontend](#frontend)
 - [Prerequisites](#prerequisites)
 - [Installation and Setup](#installation-and-setup)
 - [Usage Guide](#usage-guide)
