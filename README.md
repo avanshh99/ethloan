@@ -14,7 +14,6 @@ A full-stack decentralized application (DApp) enabling trustless, peer-to-peer l
 - [Installation and Setup](#installation-and-setup)
 - [Usage Guide](#usage-guide)
 - [Project Structure](#project-structure)
-- [Technical Specifications](#technical-specifications)
 - [Future Scope](#future-scope)
 
 ---
@@ -56,16 +55,6 @@ The frontend communicates with the smart contract through Web3.js, using MetaMas
 
 ---
 
-### State Management
-
-Global blockchain state is managed via `Web3Context.js`, which provides:
-
-- `web3` — Web3 instance connected to the current provider
-- `contract` — Deployed contract instance with ABI
-- `account` — Currently connected MetaMask wallet address
-- `connectWallet()` — Triggers MetaMask connection flow
-
----
 
 ## Prerequisites
 
