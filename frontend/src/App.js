@@ -62,7 +62,7 @@ function NavMenu() {
   return (
     <nav className="neo-card flex justify-center space-x-6 p-4 mb-8 bg-white border-4 border-black relative z-10 w-max mx-auto px-8 flex-wrap gap-y-4">
       <Link to="/marketplace" className={`font-black text-xl px-4 py-2 uppercase border-2 border-transparent transition-all hover:bg-neoBlue hover:border-black ${location.pathname === '/marketplace' ? 'bg-neoBlue border-black' : 'text-black'}`}>Marketplace</Link>
-      <Link to="/borrower" className={`font-black text-xl px-4 py-2 uppercase border-2 border-transparent transition-all hover:bg-neoPink hover:border-black ${location.pathname === '/borrower' ? 'bg-neoPink border-black' : 'text-black'}`}>Borrower Vault</Link>
+      <Link to="/borrower" className={`font-black text-xl px-4 py-2 uppercase border-2 border-transparent transition-all hover:bg-neoPurple hover:border-black ${location.pathname === '/borrower' ? 'bg-neoPurple border-black' : 'text-black'}`}>Borrower Vault</Link>
       <Link to="/lender" className={`font-black text-xl px-4 py-2 uppercase border-2 border-transparent transition-all hover:bg-neoMain hover:border-black ${location.pathname === '/lender' ? 'bg-neoMain border-black' : 'text-black'}`}>Lender Portfolio</Link>
       <Link to="/profile" className={`font-black text-xl px-4 py-2 uppercase border-2 border-transparent transition-all hover:bg-neoGreen hover:border-black ${location.pathname === '/profile' ? 'bg-neoGreen border-black' : 'text-black'}`}>On-Chain Profile</Link>
 

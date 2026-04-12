@@ -2,21 +2,25 @@ import React, { useState, useEffect } from "react";
 import { Award, Banknote, TrendingUp } from "lucide-react";
 import { useWeb3 } from "./Web3Context";
 
-function NeoBar({ percent, color = "#FF00FF", height = "h-10", label }) {
-  const clamped = Math.min(100, Math.max(0, percent));
+const NeoBar = ({ percent, color, label }) => {
   return (
-    <div className={`w-full ${height} bg-gray-100 border-4 border-black relative`}
-      style={{ overflow: "hidden" }}>
-      <div
-        className="absolute top-0 left-0 h-full"
-        style={{ width: `${clamped}%`, backgroundColor: color, transition: "width 0.7s ease" }}
-      />
-      <div className="absolute inset-0 flex items-center justify-center font-black text-sm text-black uppercase tracking-widest z-10 pointer-events-none">
-        {label ?? `${Math.floor(clamped)}%`}
+    <div className="w-full">
+      {/* Progress Container */}
+      <div className="w-full h-6 border-4 border-black rounded-md overflow-hidden bg-white">
+        {/* Progress Fill */}
+        <div
+          className="h-full transition-all duration-500"
+          style={{
+            width: `${percent}%`,
+            backgroundColor: color,
+          }}
+        />
       </div>
+      {/* Label */}
+      <p className="text-center font-black mt-1">{label}</p>
     </div>
   );
-}
+};
 
 function LenderPage() {
   const { web3, contract, account } = useWeb3();
@@ -52,7 +56,7 @@ function LenderPage() {
   }, [contract, account, web3]);
 
   const settled = lenderLoans.filter(l => Number(l.state) === 2).length;
-  const active  = lenderLoans.filter(l => Number(l.state) === 1).length;
+  const active = lenderLoans.filter(l => Number(l.state) === 1).length;
 
   return (
     <div className="space-y-8 z-10 relative pb-20">
@@ -102,8 +106,8 @@ function LenderPage() {
               const stateLabels = ["Requested ⏱", "Funded 🟢", "Repaid ✅", "Defaulted ❌"];
               const totalRepayETH = web3 ? web3.utils.fromWei(loan.repayAmount, "ether") : "0";
               const fundedETH = web3 ? web3.utils.fromWei(loan.requestedAmount, "ether") : "0";
-              const repaidNum   = Number(loan.amountRepaid);
-              const totalNum    = Number(loan.repayAmount);
+              const repaidNum = Number(loan.amountRepaid);
+              const totalNum = Number(loan.repayAmount);
               const pct = totalNum > 0 ? Math.min(100, (repaidNum / totalNum) * 100) : 0;
               const barColor = pct >= 100 ? "#4ADE80" : "#00FFFF";
               const isSettled = Number(loan.state) === 2;

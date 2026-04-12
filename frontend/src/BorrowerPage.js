@@ -3,29 +3,31 @@ import { UserCircle, Coins, HeartPulse, BadgeCheck, PlusCircle, CheckCircle2, Cl
 import { toast } from "sonner";
 import { useWeb3 } from "./Web3Context";
 
-/* ── Reusable NeoBar ────────────────────────────────────────────────────────
-   Fixes the "half-bar" visual bug:
-   - The fill div is truly absolute and uses only width — no border-right.
-   - The text label floats above the fill on its own absolute layer.
-   - overflow:hidden on the track clips everything cleanly.
-─────────────────────────────────────────────────────────────────────────── */
-function NeoBar({ percent, color = "#FF00FF", height = "h-10", label }) {
-  const clamped = Math.min(100, Math.max(0, percent));
+
+const NeoBar = ({ percent, color, label }) => {
   return (
-    <div className={`w-full ${height} bg-gray-100 border-4 border-black relative`}
-      style={{ overflow: "hidden" }}>
-      {/* Fill — pure width, no extra borders */}
-      <div
-        className="absolute top-0 left-0 h-full"
-        style={{ width: `${clamped}%`, backgroundColor: color, transition: "width 0.7s ease" }}
-      />
-      {/* Label always centered */}
-      <div className="absolute inset-0 flex items-center justify-center font-black text-sm text-black uppercase tracking-widest z-10 pointer-events-none">
-        {label ?? `${Math.floor(clamped)}%`}
+    <div className="w-full">
+
+      {/* Progress Container */}
+<div className="w-full h-6 border-4 border-black rounded-md overflow-hidden bg-white relative">
+
+        {/* Progress Fill */}
+        <div
+          className="h-full transition-all duration-500 absolute left-0 top-0"
+          style={{
+            width: `${percent}%`,
+            backgroundColor: color || "yellow",
+            display: "block",
+            zIndex: 10 
+          }}
+        />
       </div>
+
+      {/* Label */}
+      <p className="text-center font-black mt-1">{label}</p>
     </div>
   );
-}
+};
 
 function BorrowerPage() {
   const { web3, contract, account } = useWeb3();
@@ -108,7 +110,7 @@ function BorrowerPage() {
             </div>
 
             <h3 className="text-2xl font-black uppercase mb-6 flex items-center gap-3 relative z-10">
-              <span className="bg-[#FF00FF] p-2 border-2 border-black inline-flex">
+              <span className="bg-[#B233FF] p-2 border-2 border-black inline-flex">
                 <UserCircle size={28} />
               </span>
               New Request
@@ -178,7 +180,7 @@ function BorrowerPage() {
                 color={scoreColor(creditScore)}
                 label={`${creditScore}%`}
               />
-              <p className="text-[9px] font-bold text-gray-400 uppercase mt-1.5 tracking-wide">Affects your interest rate</p>
+              <p className="text-[11px] font-bold text-gray-400 uppercase mt-1.5 tracking-wide">Affects your interest rate</p>
             </div>
           </div>
         </div>
@@ -208,7 +210,7 @@ function BorrowerPage() {
           {/* Loan Cards */}
           {borrowerLoans.length === 0 ? (
             <div className="text-center font-black text-gray-300 p-20 border-8 border-dashed border-black bg-white uppercase text-2xl tracking-widest">
-               Vault Empty
+              Vault Empty
             </div>
           ) : (
             borrowerLoans.map((loan) => {
@@ -287,10 +289,10 @@ function BorrowerPage() {
                         />
                         <button
                           onClick={() => handleRepay(loan.id)}
-                          className="px-6 bg-[#4ADE80] border-4 border-black font-black text-base uppercase hover:bg-[#22c55e] transition-colors active:translate-x-0.5 active:translate-y-0.5"
+                          className="px-4 bg-[#4ADE80] border-4 border-black font-black text-base uppercase hover:bg-[#22c55e] transition-colors active:translate-x-0.5 active:translate-y-0.5"
                           style={{ boxShadow: "3px 3px 0 #000" }}
                         >
-                          ⚡ REPAY
+                          REPAY
                         </button>
                       </div>
                     )}

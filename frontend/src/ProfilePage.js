@@ -3,33 +3,32 @@ import { User, Medal, ArrowUpCircle, Trophy } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { useWeb3 } from "./Web3Context";
 
-function NeoBar({ percent, color = "#FFE533", height = "h-10", label }) {
-  const clamped = Math.min(100, Math.max(0, percent));
+const NeoBar = ({ percent, color, label }) => {
   return (
-    <div className={`w-full ${height} bg-gray-100 border-4 border-black relative`}
-      style={{ overflow: "hidden" }}>
-      <div
-        className="absolute top-0 left-0 h-full"
-        style={{ width: `${clamped}%`, backgroundColor: color, transition: "width 0.8s ease" }}
-      />
-      <div className="absolute inset-0 flex items-center justify-center font-black text-sm text-black uppercase tracking-widest z-10 pointer-events-none">
-        {label ?? `${Math.floor(clamped)}%`}
+    <div className="w-full">
+      {/* Progress Container */}
+      <div className="w-full h-6 border-4 border-black rounded-md overflow-hidden bg-white">
+        {/* Progress Fill */}
+        <div
+          className="h-full transition-all duration-500"
+          style={{
+            width: `${percent}%`,
+            backgroundColor: color,
+          }}
+        />
       </div>
+      {/* Label */}
+      <p className="text-center font-black mt-1">{label}</p>
     </div>
   );
-}
+};
 
 function ProfilePage() {
   const { web3, contract, account } = useWeb3();
-  const [stats, setStats] = useState({ creditScore: 50, lenderXP: 0, totalBorrowed: 0, totalLent: 0 });
+  const [stats, setStats] = useState({ creditScore: 0, lenderXP: 0, totalBorrowed: 0, totalLent: 0 });
   const { creditScore, lenderXP } = stats;
 
-  const chartData = [
-    { name: "Jan", borrowed: 0, lent: 0 },
-    { name: "Feb", borrowed: 1.5, lent: 0 },
-    { name: "Mar", borrowed: 0.5, lent: 2.0 },
-    { name: "Apr", borrowed: Number(stats.totalBorrowed), lent: Number(stats.totalLent) },
-  ];
+  const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
     async function loadStats() {
@@ -37,17 +36,47 @@ function ProfilePage() {
       try {
         const score = await contract.methods.getCreditScore(account).call();
         const xp = await contract.methods.lenderXP(account).call();
+
+        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        const timeline = [];
+        for (let i = 5; i >= 0; i--) {
+          const d = new Date();
+          d.setMonth(d.getMonth() - i);
+          timeline.push({
+            name: monthNames[d.getMonth()],
+            monthNum: d.getMonth(),
+            year: d.getFullYear(),
+            borrowed: 0,
+            lent: 0
+          });
+        }
+
         const borrowIds = await contract.methods.getBorrowerLoans(account).call();
         const lendIds = await contract.methods.getLenderLoans(account).call();
+
         let bVol = 0, lVol = 0;
+
         for (let id of borrowIds) {
           const l = await contract.methods.loans(id).call();
-          bVol += parseFloat(web3.utils.fromWei(l.requestedAmount, "ether"));
+          const pAmount = parseFloat(web3.utils.fromWei(l.requestedAmount, "ether"));
+          bVol += pAmount;
+
+          const cd = new Date(Number(l.createdAt) * 1000);
+          const tMatch = timeline.find(t => t.monthNum === cd.getMonth() && t.year === cd.getFullYear());
+          if (tMatch) tMatch.borrowed += pAmount;
         }
+
         for (let id of lendIds) {
           const l = await contract.methods.loans(id).call();
-          lVol += parseFloat(web3.utils.fromWei(l.requestedAmount, "ether"));
+          const pAmount = parseFloat(web3.utils.fromWei(l.requestedAmount, "ether"));
+          lVol += pAmount;
+
+          const cd = new Date(Number(l.createdAt) * 1000);
+          const tMatch = timeline.find(t => t.monthNum === cd.getMonth() && t.year === cd.getFullYear());
+          if (tMatch) tMatch.lent += pAmount;
         }
+
+        setChartData(timeline);
         setStats({
           creditScore: parseInt(Number(score)),
           lenderXP: parseInt(Number(xp)),
@@ -179,7 +208,7 @@ function ProfilePage() {
         </div>
         <div className="flex gap-8 mt-5 justify-center">
           <div className="flex items-center gap-2 font-bold text-sm">
-            <div className="w-4 h-4 border-2 border-black bg-[#80BDFB]" /> 
+            <div className="w-4 h-4 border-2 border-black bg-[#80BDFB]" />
             <span>Borrowed Volume</span>
           </div>
           <div className="flex items-center gap-2 font-bold text-sm">
