@@ -78,7 +78,7 @@ function ProfilePage() {
           </div>
         </div>
         <div className="text-right shrink-0">
-          <p className="text-xs font-black uppercase text-gray-400 mb-2">Current Rank</p>
+          <p className="text-l font-black uppercase text-gray-400 mb-2">Current Rank</p>
           <div
             className="text-2xl font-black bg-[#be23c6ff] px-5 py-3 border-4 border-black inline-block transform rotate-1"
             style={{ boxShadow: "3px 3px 0 #000" }}
@@ -101,6 +101,10 @@ function ProfilePage() {
             <span className="text-8xl font-black leading-none">{creditScore}</span>
             <span className="text-xl font-bold text-gray-400 mb-1">/ 100</span>
           </div>
+          {/* Invisible spacer to exactly align progress bars vertically */}
+          <div className="flex justify-between text-[11px] font-black uppercase text-gray-400 mb-1 relative z-10 invisible">
+            <span>ALIGNMENT</span>
+          </div>
           <NeoBar
             percent={creditScore}
             color={scoreColor(creditScore)}
@@ -122,12 +126,12 @@ function ProfilePage() {
             <span className="text-xl font-bold text-gray-400 mb-1 uppercase">Pts</span>
           </div>
           {/* XP tier markers */}
-          <div className="flex justify-between text-[9px] font-black uppercase text-gray-400 mb-1 relative z-10">
+          <div className="flex justify-between text-[11px] font-black uppercase text-gray-400 mb-1 relative z-10">
             <span>Newbie</span><span>Pro (50)</span><span>Whale (100)</span>
           </div>
           <NeoBar
             percent={lenderXP}
-            color="#be23c6ff"
+            color="#d65ccaff"
             height="h-10"
             label={`${lenderXP} / 100 XP`}
           />
@@ -159,11 +163,11 @@ function ProfilePage() {
         <h3 className="text-2xl font-black uppercase mb-6 flex items-center gap-2">
           <ArrowUpCircle size={28} /> Transaction Analytics
         </h3>
-        <div className="w-full h-72 border-4 border-black bg-gray-50 pr-4 pt-4">
+        <div className="w-full h-[320px] border-4 border-black bg-gray-50 pr-4 pt-6 pb-2">
           <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={chartData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+            <AreaChart data={chartData} margin={{ top: 0, right: 30, left: 0, bottom: 20 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#000" vertical={false} />
-              <XAxis dataKey="name" stroke="#000" tick={{ fill: "#000", fontWeight: "bold", fontSize: 12 }} />
+              <XAxis dataKey="name" stroke="#000" tick={{ fill: "#000", fontWeight: "bold", fontSize: 13 }} tickMargin={12} />
               <YAxis stroke="#000" tick={{ fill: "#000", fontWeight: "bold", fontSize: 12 }} />
               <Tooltip
                 contentStyle={{ backgroundColor: "#fff", border: "4px solid #000", borderRadius: 0, boxShadow: "4px 4px 0 #000", fontWeight: "bold" }}
@@ -173,9 +177,15 @@ function ProfilePage() {
             </AreaChart>
           </ResponsiveContainer>
         </div>
-        <div className="flex gap-6 mt-4 justify-center">
-          <div className="flex items-center gap-2 font-bold text-sm"><div className="w-4 h-4 border-2 border-black bg-[#80BDFB]" /> Borrowed Volume</div>
-          <div className="flex items-center gap-2 font-bold text-sm"><div className="w-4 h-4 border-2 border-black bg-[#FFE533]" /> Lent Volume</div>
+        <div className="flex gap-8 mt-5 justify-center">
+          <div className="flex items-center gap-2 font-bold text-sm">
+            <div className="w-4 h-4 border-2 border-black bg-[#80BDFB]" /> 
+            <span>Borrowed Volume</span>
+          </div>
+          <div className="flex items-center gap-2 font-bold text-sm">
+            <div className="w-4 h-4 border-2 border-black bg-[#FFE533]" />
+            <span>Lent Volume</span>
+          </div>
         </div>
       </div>
     </div>
