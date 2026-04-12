@@ -94,16 +94,30 @@ contract SimpleLendingContract {
         require(msg.sender == loan.borrower, "Only borrower can repay");
         require(msg.value > 0, "Send ETH to repay");
 
-        loan.amountRepaid += msg.value;
+        uint remainingDebt = loan.repayAmount - loan.amountRepaid;
+        uint amountToApply = msg.value;
+        uint refundAmount = 0;
 
-        // Forward repayment to lender
+        if (msg.value > remainingDebt) {
+            amountToApply = remainingDebt;
+            refundAmount = msg.value - remainingDebt;
+        }
+
+        loan.amountRepaid += amountToApply;
+
+        // Forward exact repayment to lender 
         if (loan.lender != address(0)) {
-            loan.lender.transfer(msg.value);
+            loan.lender.transfer(amountToApply);
+        }
+
+        // Immediately refund any excess overpayment back to the borrower
+        if (refundAmount > 0) {
+            payable(msg.sender).transfer(refundAmount);
         }
 
         if (loan.amountRepaid >= loan.repayAmount) {
             loan.state = LoanState.Repaid;
-            // Return collateral to borrower
+            // Return original collateral to borrower
             loan.borrower.transfer(loan.collateralAmount);
             // Boost credit score
             if (creditScores[loan.borrower] < 100) {
@@ -114,7 +128,7 @@ contract SimpleLendingContract {
             }
         }
 
-        emit LoanRepaid(_loanId, msg.value);
+        emit LoanRepaid(_loanId, amountToApply);
     }
 
     // ─── Views ──────────────────────────────────────────────────────────────

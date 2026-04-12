@@ -84,12 +84,31 @@ function BorrowerPage() {
     if (!amount) return toast.error("Enter repay amount.");
     try {
       toast.info("Processing repayment…");
+      
+      const loan = borrowerLoans.find(l => l.id.toString() === loanId.toString());
+      const totalRepayETH = web3.utils.fromWei(loan.repayAmount, "ether");
+      const repaidETH = web3.utils.fromWei(loan.amountRepaid, "ether");
+      const remainingDebt = Number(totalRepayETH) - Number(repaidETH);
+      const inputAmount = Number(amount);
+
       await contract.methods.repayLoan(loanId).send({
         from: account,
         value: web3.utils.toWei(amount, "ether")
       });
-      toast.success("Repayment successful!");
-      window.location.reload();
+
+      if (inputAmount > remainingDebt) {
+        const excess = (inputAmount - remainingDebt).toFixed(4);
+        toast.success(`Repayment successful! Excess of ${excess} ETH was safely refunded to your wallet!`, {
+          duration: 6000,
+        });
+      } else {
+        toast.success("Repayment successful!");
+      }
+      
+      setTimeout(() => {
+        window.location.reload();
+      }, 3500);
+      
     } catch (err) {
       toast.error("Repayment failed: " + err.message);
     }
