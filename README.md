@@ -1,4 +1,4 @@
-# EthLoan — Decentralized Peer-to-Peer Lending Platform
+# EthLoan: Decentralized Peer-to-Peer Lending Platform
 
 A full-stack decentralized application (DApp) enabling trustless, peer-to-peer lending on the Ethereum blockchain. Borrowers request collateral-backed loans, lenders fund them for interest-based returns, and all state transitions are enforced on-chain via smart contracts.
 
