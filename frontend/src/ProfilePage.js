@@ -58,12 +58,14 @@ function ProfilePage() {
 
         for (let id of borrowIds) {
           const l = await contract.methods.loans(id).call();
-          const pAmount = parseFloat(web3.utils.fromWei(l.requestedAmount, "ether"));
-          bVol += pAmount;
+          if (Number(l.state) > 0) { // Only count if actually funded
+            const pAmount = parseFloat(web3.utils.fromWei(l.requestedAmount, "ether"));
+            bVol += pAmount;
 
-          const cd = new Date(Number(l.createdAt) * 1000);
-          const tMatch = timeline.find(t => t.monthNum === cd.getMonth() && t.year === cd.getFullYear());
-          if (tMatch) tMatch.borrowed += pAmount;
+            const cd = new Date(Number(l.createdAt) * 1000);
+            const tMatch = timeline.find(t => t.monthNum === cd.getMonth() && t.year === cd.getFullYear());
+            if (tMatch) tMatch.borrowed += pAmount;
+          }
         }
 
         for (let id of lendIds) {

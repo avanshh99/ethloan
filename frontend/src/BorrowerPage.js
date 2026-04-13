@@ -7,18 +7,16 @@ import { useWeb3 } from "./Web3Context";
 const NeoBar = ({ percent, color, label }) => {
   return (
     <div className="w-full">
-
+      
       {/* Progress Container */}
-<div className="w-full h-6 border-4 border-black rounded-md overflow-hidden bg-white relative">
-
+      <div className="w-full h-6 border-4 border-black rounded-md overflow-hidden bg-white">
+        
         {/* Progress Fill */}
         <div
-          className="h-full transition-all duration-500 absolute left-0 top-0"
+          className="h-full transition-all duration-500"
           style={{
             width: `${percent}%`,
-            backgroundColor: color || "yellow",
-            display: "block",
-            zIndex: 10 
+            backgroundColor: color,
           }}
         />
       </div>
